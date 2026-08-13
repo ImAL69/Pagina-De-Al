@@ -92,7 +92,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="es">
       <body>
-        <nav className="p-4 border-b">Mi navbar</nav>
+        <PersonaMenu />
+        <MusicPlayer />
         {children}   {/* acá se inyecta cada página */}
         <footer className="p-4 border-t">© 2026 Al</footer>
       </body>
@@ -376,9 +377,10 @@ app/
 ├── page.tsx                   → /
 ├── sobre-mi/page.tsx          → /sobre-mi
 ├── proyectos/page.tsx         → /proyectos
-├── proyectos/[slug]/page.tsx  → /proyectos/mi-proyecto
-├── contacto/page.tsx          → /contacto
-├── _components/NavBar.tsx     → no es URL; componente privado
+├── blog/[slug]/page.tsx       → /blog/mi-post
+├── prueba/page.tsx            → /prueba
+├── components/PersonaMenu.tsx → Menú circular rotatorio
+├── components/MusicPlayer.tsx → Reproductor de música global
 ├── loading.tsx                → interfaz de carga
 ├── not-found.tsx              → página 404
 └── error.tsx                  → interfaz ante errores
@@ -414,10 +416,10 @@ import Link from "next/link";
 export default function ProyectosPage() {
   return (
     <main className="mx-auto max-w-5xl p-6">
-      <p className="text-sm font-bold uppercase tracking-[0.2em] text-cyan-300">Archivo 01</p>
-      <h1 className="mt-2 text-5xl font-black">Proyectos</h1>
-      <p className="mt-4 max-w-2xl text-zinc-300">Experimentos y aplicaciones que estoy aprendiendo a construir.</p>
-      <Link href="/" className="mt-8 inline-flex rounded bg-cyan-300 px-5 py-3 font-bold text-slate-950 transition hover:-translate-y-1 hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-300">
+      <p className="text-sm font-bold uppercase tracking-[0.2em] text-p5-red">Archivo 01</p>
+      <h1 className="mt-2 text-5xl font-black italic uppercase persona-text-shadow">Proyectos</h1>
+      <p className="mt-4 max-w-2xl text-zinc-400">Experimentos y aplicaciones que estoy aprendiendo a construir.</p>
+      <Link href="/" className="mt-8 inline-flex bg-p5-red px-5 py-3 font-bold text-p5-white transition hover:-translate-y-1 hover:bg-p5-black focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-p5-red persona-slant">
         Volver al inicio
       </Link>
     </main>
@@ -450,13 +452,13 @@ type TarjetaProyectoProps = {
 
 export function TarjetaProyecto({ titulo, descripcion, tecnologias, href, destacado = false }: TarjetaProyectoProps) {
   return (
-    <article className={`border-2 p-5 ${destacado ? "border-fuchsia-500" : "border-cyan-300"}`}>
-      <h2 className="text-2xl font-black">{titulo}</h2>
-      <p className="mt-2 text-zinc-300">{descripcion}</p>
+    <article className={`border-4 p-5 ${destacado ? "border-p5-red shadow-[8px_8px_0px_0px_rgba(230,0,18,1)]" : "border-p5-black shadow-[8px_8px_0px_0px_rgba(10,10,10,1)]"} bg-p5-white`}>
+      <h2 className="text-2xl font-black italic uppercase">{titulo}</h2>
+      <p className="mt-2 text-zinc-800">{descripcion}</p>
       <ul className="mt-4 flex flex-wrap gap-2">
-        {tecnologias.map((tecnologia) => <li key={tecnologia} className="bg-cyan-300 px-2 py-1 text-xs font-bold text-slate-950">{tecnologia}</li>)}
+        {tecnologias.map((tecnologia) => <li key={tecnologia} className="bg-p5-black px-2 py-1 text-xs font-bold text-p5-white persona-slant">{tecnologia}</li>)}
       </ul>
-      <a href={href} className="mt-5 inline-block font-bold text-fuchsia-300 underline">Abrir proyecto</a>
+      <a href={href} className="mt-5 inline-block font-black uppercase italic text-p5-red underline">Abrir proyecto</a>
     </article>
   );
 }
@@ -513,58 +515,31 @@ export function ContadorApoyos() {
 
 Nunca modifiques estado directamente (`apoyos++`); usa el setter. La forma `setApoyos(anterior => anterior + 1)` es segura si React agrupa varias actualizaciones.
 
-## 10.6 Crear un menú reutilizable
+## 10.6 El Menú Circular (PersonaMenu)
+
+Para la navegación principal, hemos implementado un menú circular rotatorio inspirado en *Persona 5 Royal*.
 
 ```tsx
-// app/_components/NavBar.tsx
-import Link from "next/link";
-
-const enlaces = [
-  { href: "/", etiqueta: "Inicio" },
-  { href: "/sobre-mi", etiqueta: "Sobre mí" },
-  { href: "/proyectos", etiqueta: "Proyectos" },
-  { href: "/contacto", etiqueta: "Contacto" },
+// app/components/PersonaMenu.tsx
+const menuItems = [
+  { href: "/", icon: <Home />, label: "Inicio", color: "bg-p-red" },
+  { href: "/sobre-mi", icon: <User />, label: "Sobre mí", color: "bg-p-blue" },
+  { href: "/proyectos", icon: <Briefcase />, label: "Proyectos", color: "bg-p-yellow" },
 ];
 
-export function NavBar() {
+export function PersonaMenu() {
+  const [isOpen, setIsOpen] = useState(false);
+  // Lógica de animaciones con framer-motion y rotación orbital
   return (
-    <nav aria-label="Navegación principal" className="border-b-4 border-cyan-300 bg-slate-950">
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-2 p-4">
-        <Link href="/" className="mr-auto text-xl font-black uppercase tracking-wider text-cyan-300">AL//STUDIO</Link>
-        {enlaces.map((enlace) => (
-          <Link key={enlace.href} href={enlace.href} className="rounded px-3 py-2 text-sm font-bold uppercase tracking-wider text-white transition hover:bg-fuchsia-500 hover:text-slate-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300">
-            {enlace.etiqueta}
-          </Link>
-        ))}
-      </div>
-    </nav>
-  );
-}
-```
-
-Impórtalo en `app/layout.tsx` antes de `{children}` para mostrarlo en todas las páginas. Para resaltar la ruta activa usa `usePathname()` dentro de un componente con `"use client"`.
-
-Un menú móvil necesita estado y atributos accesibles:
-
-```tsx
-"use client";
-import Link from "next/link";
-import { useState } from "react";
-
-export function MenuMovil() {
-  const [abierto, setAbierto] = useState(false);
-  return (
-    <div className="md:hidden">
-      <button type="button" aria-expanded={abierto} aria-controls="menu-principal" onClick={() => setAbierto((estado) => !estado)}>
-        {abierto ? "Cerrar" : "Menú"}
-      </button>
-      {abierto && <nav id="menu-principal" aria-label="Navegación móvil"><Link href="/proyectos" onClick={() => setAbierto(false)}>Proyectos</Link></nav>}
+    <div className="fixed bottom-10 right-10 z-[100]">
+      <button onClick={() => setIsOpen(!isOpen)}>MENÚ</button>
+      {/* Overlay de blur y opciones rotatorias */}
     </div>
   );
 }
 ```
 
-En un menú modal completo, también gestiona el foco y permite cerrarlo con Escape.
+Este menú se encuentra en `app/layout.tsx` para que esté disponible en todo el sitio. Gestiona el desenfoque del fondo (`backdrop-blur`) y una animación de rotación infinita para las opciones.
 
 ## 10.7 Formularios tipados y seguros
 
@@ -636,11 +611,17 @@ import Image from "next/image";
 <Image src="/proyectos/portafolio.jpg" alt="Captura de mi portafolio" width={1200} height={675} className="h-auto w-full" />
 ```
 
-Sistema visual inicial propio en `app/globals.css`:
+Sistema visual oficial Persona en `app/globals.css`:
 
 ```css
-:root { --ink: #071a3d; --paper: #fff5d6; --signal: #39e7ff; --accent: #ff2e93; }
-body { background: var(--paper); color: var(--ink); }
+:root {
+  --p5-red: #E60012;
+  --p5-black: #0A0A0A;
+  --p3-cobalt: #0052CC;
+  --p1-purple: #2B1055;
+}
+body { background: var(--p5-white); color: var(--p5-black); }
+```
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
 }
@@ -648,22 +629,19 @@ body { background: var(--paper); color: var(--ink); }
 
 Ideas que dan energía sin perder usabilidad: títulos enormes, etiquetas cortas en mayúscula, bordes gruesos, bloques diagonales como decoración, contraste alto, transiciones de 150–250 ms y mensajes de estado claros. No uses color como única señal y mantén el foco visible para teclado.
 
-## 10.10 Arquitectura recomendada
+## 10.10 Arquitectura actual del proyecto
 
 ```text
 app/
-├── _components/   # NavBar, MenuMovil, TarjetaProyecto, FormularioContacto
-├── _data/         # proyectos.ts y datos tipados
-├── sobre-mi/page.tsx
-├── proyectos/page.tsx
-├── proyectos/[slug]/page.tsx
-├── contacto/page.tsx
-├── globals.css
-├── layout.tsx
-└── page.tsx
-public/
-├── proyectos/
-└── iconos/
+├── components/    # PersonaMenu, MusicPlayer, ProjectsNavbar
+├── sobre-mi/      # Página biográfica
+├── proyectos/     # Dashboard temático de proyectos
+├── blog/[slug]/   # Rutas dinámicas de artículos
+├── prueba/        # Página de tests
+├── globals.css    # Paletas Persona 5, 3 y 1
+├── layout.tsx     # RootLayout con Menú y Música
+└── page.tsx       # Landing page (P5 Style)
+public/            # Activos estáticos
 ```
 
 Empieza simple y extrae componentes cuando una parte se repita, crezca o tenga una responsabilidad clara.
@@ -895,3 +873,59 @@ Al presionar una opción, esta reacciona físicamente antes de navegar.
 ### 12.6 Cómo replicar estos efectos en otros componentes
 
 Si quieres aplicar estos efectos (como el blur o la rotación) a otros elementos de tu página, busca los comentarios en el archivo `app/components/PersonaMenu.tsx`. He dejado explicaciones paso a paso dentro del código para que sepas qué línea hace cada cosa.
+
+---
+
+## 13. Nuevas Funcionalidades: Proyectos Temáticos y Música
+
+Hemos expandido la página con sistemas visuales específicos para cada tipo de contenido y una experiencia sonora global.
+
+### 13.1 Paletas de Colores Específicas (Persona Official Hex)
+
+Hemos actualizado el proyecto con los códigos hexadecimales exactos de las interfaces de Persona para una fidelidad total:
+
+1.  **Persona 5 (Estética General y Base)**:
+    - **Rojo Carmesí (P5 Red)**: `#E60012` — El rojo saturado que domina los menús.
+    - **Negro Azabache**: `#0A0A0A` — Fondo mate profundo (estilo fanzine/cómic).
+    - **Blanco de Contraste**: `#FFFFFF` — Tipografía recortada y viñetas.
+
+2.  **Persona 3 / Persona 3 Reload (Sección Arte)**:
+    - **Azul Cobalto**: `#0052CC` — Azul vibrante del menú de estado.
+    - **Azul Dark Hour**: `#0B132B` — Tono marino oscuro de la hora escondida.
+    - **Cian Neón / Cristal**: `#00C3FF` — Destellos dinámicos de P3 Reload.
+
+3.  **Persona 1 (Sección Juegos)**:
+    - **Púrpura Místico**: `#2B1055` — Violeta profundo de la era PS1.
+    - **Verde Azulado (Teal PS1)**: `#1E5A61` — Tono apagado de marcos noventeros.
+    - **Gris Hueso**: `#D3D3D3` — Fuentes y ventanas estilo pantalla CRT.
+
+4.  **Otros Estilos Implementados**:
+    - **Software (Persona 6 Concept)**: Verde Hacker (`#00ff41`) con estética de terminal.
+    - **Animaciones (Anime/DBZ)**: Naranja Energía (`#ff6b00`) y Azul Saiyan (`#0055ff`).
+
+### 13.2 Barra de Navegación de Proyectos (`ProjectsNavbar`)
+
+En la ruta `/proyectos`, ahora dispones de una barra de navegación independiente que permite alternar entre las secciones mencionadas.
+
+- **Diseño**: Basado en el estilo "Comic" de Persona 5, con cajas inclinadas que se desplazan desde el lateral.
+- **Toggle**: Un botón en el lateral permite ocultar o mostrar el menú de secciones.
+- **Animaciones**: Utiliza `skew` y `x-translation` en Framer Motion para entrar con un ángulo agresivo, replicando las transiciones de los menús de P5R.
+
+### 13.3 Reproductor de Música Global (`MusicPlayer`)
+
+Ubicado en la esquina inferior izquierda, este componente permite añadir una atmósfera sonora a toda la web.
+
+- **Estado de Reproducción**: Controla visualmente si la música está activa con animaciones de ondas sonoras y cambios de iconos (`Volume2` / `VolumeX`).
+- **Estética Persona**: El botón tiene un fondo rojo que se desplaza infinitamente cuando la música está activa, inspirado en la barra de "Now Playing" de los juegos.
+- **Implementación**: Se integró en `app/layout.tsx` para que la música no se corte al navegar entre diferentes páginas.
+
+### 13.4 Cómo agregar tu propia música
+
+Para que el reproductor funcione con sonido real:
+1. Pon tu archivo de audio (ej: `musica.mp3`) en la carpeta `public/`.
+2. En `app/components/MusicPlayer.tsx`, añade la lógica de audio de HTML5:
+   ```tsx
+   const [audio] = useState(new Audio("/musica.mp3"));
+   // ... dentro de toggleMusic:
+   isPlaying ? audio.pause() : audio.play();
+   ```

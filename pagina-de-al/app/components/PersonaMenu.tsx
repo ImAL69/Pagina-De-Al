@@ -41,7 +41,7 @@ export default function PersonaMenu() {
         <motion.button
           onClick={toggleMenu}
           aria-label={isOpen ? "Cerrar menú" : "Abrir menú"}
-          className="relative z-50 flex h-20 w-20 items-center justify-center border-4 border-black bg-white text-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-transform active:scale-95"
+          className="relative z-50 flex h-20 w-20 items-center justify-center border-4 border-p5-black bg-p5-white text-p5-black shadow-[8px_8px_0px_0px_rgba(10,10,10,1)] transition-transform active:scale-95"
           animate={{ rotate: isOpen ? 135 : 0 }}
           whileHover={{ scale: 1.1, rotate: isOpen ? 145 : 10 }}
         >
@@ -110,7 +110,7 @@ export default function PersonaMenu() {
                           <Link
                             href={item.href}
                             onClick={() => setIsOpen(false)}
-                            className={`group relative flex h-24 w-24 items-center justify-center rounded-none border-4 border-black text-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] ${item.color} transition-transform hover:-translate-x-1 hover:-translate-y-1`}
+                            className={`group relative flex h-24 w-24 items-center justify-center rounded-none border-4 border-p5-black text-p5-white shadow-[6px_6px_0px_0px_rgba(10,10,10,1)] ${item.color} transition-transform hover:-translate-x-1 hover:-translate-y-1`}
                             style={{ transform: "rotate(-5deg)" }}
                           >
                             {/* 
@@ -128,7 +128,7 @@ export default function PersonaMenu() {
                             </motion.span>
                             
                             {/* Etiqueta flotante con estilo Persona */}
-                            <span className="absolute -bottom-12 whitespace-nowrap bg-black px-3 py-1 text-sm font-bold uppercase italic text-white opacity-0 transition-opacity group-hover:opacity-100 shadow-[4px_4px_0px_0px_rgba(211,26,26,1)]">
+                            <span className="absolute -bottom-12 whitespace-nowrap bg-p5-black px-3 py-1 text-sm font-bold uppercase italic text-p5-white opacity-0 transition-opacity group-hover:opacity-100 shadow-[4px_4px_0px_0px_rgba(230,0,18,1)]">
                               {item.label}
                             </span>
                           </Link>

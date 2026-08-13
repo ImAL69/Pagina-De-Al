@@ -2,11 +2,33 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
-  --persona-red: #d31a1a;
-  --persona-blue: #0095ff;
+  --foreground: #000000;
+  
+  /* Persona 5 Palette (General) */
+  --p5-red: #E60012;
+  --p5-black: #0A0A0A;
+  --p5-white: #FFFFFF;
+  
+  /* Persona 3 Palette (Arte) */
+  --p3-cobalt: #0052CC;
+  --p3-dark-hour: #0B132B;
+  --p3-neon: #00C3FF;
+  
+  /* Persona 1 Palette (Juegos) */
+  --p1-purple: #2B1055;
+  --p1-teal: #1E5A61;
+  --p1-bone: #D3D3D3;
+  
+  /* Global Alias (Persona Style) */
+  --persona-red: var(--p5-red);
+  --persona-blue: var(--p3-cobalt);
   --persona-yellow: #fff200;
-  --persona-black: #000000;
+  --persona-black: var(--p5-black);
+  
+  /* Temas específicos adicionales */
+  --hacker-green: #00ff41;
+  --dbz-orange: #ff6b00;
+  --dbz-blue: #0055ff;
 }
 
 @theme inline {
@@ -16,6 +38,27 @@
   --color-p-blue: var(--persona-blue);
   --color-p-yellow: var(--persona-yellow);
   --color-p-black: var(--persona-black);
+  
+  /* P5 */
+  --color-p5-red: var(--p5-red);
+  --color-p5-black: var(--p5-black);
+  --color-p5-white: var(--p5-white);
+  
+  /* P3 */
+  --color-p3-cobalt: var(--p3-cobalt);
+  --color-p3-dark: var(--p3-dark-hour);
+  --color-p3-neon: var(--p3-neon);
+  
+  /* P1 */
+  --color-p1-purple: var(--p1-purple);
+  --color-p1-teal: var(--p1-teal);
+  --color-p1-bone: var(--p1-bone);
+
+  /* Others */
+  --color-h-green: var(--hacker-green);
+  --color-dbz-orange: var(--dbz-orange);
+  --color-dbz-blue: var(--dbz-blue);
+  
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -31,6 +74,7 @@ body {
   background: var(--background);
   color: var(--foreground);
   overflow-x: hidden;
+  font-family: var(--font-sans);
 }
 
 .persona-cut {
@@ -38,9 +82,24 @@ body {
 }
 
 .persona-slant {
-  transform: skewX(-5deg);
+  transform: skewX(-10deg);
 }
 
 .persona-text-shadow {
-  text-shadow: 4px 4px 0px var(--persona-red);
+  text-shadow: 6px 6px 0 var(--persona-black);
+}
+
+.persona-red-shadow {
+  text-shadow: 4px 4px 0 var(--persona-red);
+}
+
+/* Efecto tipo comic para P5R */
+.comic-border {
+  border: 4px solid black;
+  box-shadow: 8px 8px 0px 0px rgba(0,0,0,1);
+}
+
+.comic-border-red {
+  border: 4px solid black;
+  box-shadow: 8px 8px 0px 0px var(--persona-red);
 }
