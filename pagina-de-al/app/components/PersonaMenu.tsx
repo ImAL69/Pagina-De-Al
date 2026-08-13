@@ -10,7 +10,8 @@ import {
   Settings, 
   Menu, 
   X,
-  FileText
+  FileText,
+  Sparkles
 } from "lucide-react";
 
 /**
@@ -21,6 +22,7 @@ const menuItems = [
   { href: "/", icon: <Home size={24} />, label: "Inicio", color: "bg-p-red" },
   { href: "/sobre-mi", icon: <User size={24} />, label: "Sobre mí", color: "bg-p-blue" },
   { href: "/proyectos", icon: <Briefcase size={24} />, label: "Proyectos", color: "bg-p-yellow" },
+  { href: "/ia", icon: <Sparkles size={24} />, label: "Gemini", color: "bg-p5-red" },
   { href: "/prueba", icon: <Settings size={24} />, label: "Prueba", color: "bg-zinc-800" },
   { href: "/blog/hola-mundo", icon: <FileText size={24} />, label: "Blog", color: "bg-p-black" },
 ];

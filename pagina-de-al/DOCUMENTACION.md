@@ -929,3 +929,48 @@ Para que el reproductor funcione con sonido real:
    // ... dentro de toggleMusic:
    isPlaying ? audio.pause() : audio.play();
    ```
+
+## 14. Integración de IA y Variables de Env (Gemini)
+
+Para implementar funcionalidades de Inteligencia Artificial (como un chatbot o generador de contenido) usando la API de Gemini de Google, hemos preparado el sistema de variables de entorno.
+
+### 14.1 Configuración de la API Key
+
+En lugar de exponer tus claves secretas en el código (lo cual es peligroso), utilizamos archivos `.env`.
+
+1.  **`.env.local`**: Es el archivo donde debes pegar tu clave real. Este archivo está en el `.gitignore`, lo que significa que **nunca se subirá a GitHub**, manteniendo tu clave segura.
+2.  **`.env.example`**: Es una plantilla pública para que otros sepan qué variables necesita el proyecto sin ver tus claves reales.
+
+**Pasos para configurar Gemini:**
+1. Obtén tu clave en [Google AI Studio](https://aistudio.google.com/).
+2. Abre el archivo `.env.local` que he creado en la raíz del proyecto.
+3. Reemplaza `tu_clave_aqui_sin_comillas` por tu clave real de Gemini.
+
+### 14.2 Instalación de la Librería
+
+Para usar Gemini en React/Next.js, te recomiendo instalar la librería oficial:
+
+```bash
+npm install @google/generative-ai
+```
+
+### 14.3 Ejemplo de Uso en Next.js (Implementado)
+
+Hemos creado una implementación completa para que la pruebes:
+
+1.  **Ruta de API (`app/api/chat/route.ts`)**: Recibe el prompt del usuario y consulta a Gemini de forma segura en el servidor.
+2.  **Página de Chat (`app/ia/page.tsx`)**: Una interfaz inmersiva con estética de Persona 5 para interactuar con la IA.
+3.  **Acceso directo**: Puedes encontrar el botón de "Gemini" en el menú circular principal.
+
+**Cómo extenderlo:**
+Si quieres cambiar la personalidad de la IA (actualmente configurada como Morgana de P5), edita el archivo `app/api/chat/route.ts` y modifica el primer elemento del array en `model.generateContent`.
+
+```tsx
+// app/api/chat/route.ts
+const result = await model.generateContent([
+  "Instrucción de personalidad aquí...",
+  prompt
+]);
+```
+
+> **Nota técnica**: Asegúrate de tener `GEMINI_API_KEY` en tu `.env.local`. Si cambias la clave, reinicia el servidor de desarrollo para que los cambios surtan efecto.
